@@ -1,11 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { getPosts } from '../utils/content';
 import { getTools } from '../utils/tools';
 const resources = await getCollection('resources');
 const projects = await getCollection('projects');
-const hasPosts = (await getPosts()).length > 0;
 const tools = await getTools();
 const all = [...resources, ...projects];
 const checkedCount = all.filter((e) => e.data.provenance.checkedOn !== null).length;
@@ -53,35 +51,29 @@ const rows = [
         <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 10H17M11 4L17 10L11 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
       </a>
       <a class="button alt" href="/projects/">Browse projects</a>
-      
     </div>
+    {tools.length > 0 && (
+      <section class="tools-section" aria-labelledby="tools-heading">
+        <h2 id="tools-heading">Tools we’ve built</h2>
+        <ul class="tool-cards">
+          {tools.map((tool) => (
+            <li class="tool-card">
+              <h3>{tool.data.title}</h3>
+              <p>{tool.data.summary}</p>
+              {tool.data.url ? (
+                <a class="card-link" href={tool.data.url} target="_blank" rel="noopener noreferrer">
+                  Open tool <span aria-hidden="true">↗</span>
+                </a>
+              ) : (
+                <span class="tool-status">Coming soon</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
   </section>
 
-  {tools.length > 0 && (
-    <section class="tools-section" aria-labelledby="tools-heading">
-      <div class="tools-heading">
-        <div>
-          <p class="tools-kicker">OpenForge tools</p>
-          <h2 id="tools-heading">Tools we’ve built</h2>
-        </div>
-      </div>
-      <ul class="tool-cards">
-        {tools.map((tool) => (
-          <li class="tool-card">
-            <h3>{tool.data.title}</h3>
-            <p>{tool.data.summary}</p>
-            {tool.data.url ? (
-              <a class="card-link" href={tool.data.url} target="_blank" rel="noopener noreferrer">
-                Open tool <span aria-hidden="true">↗</span>
-              </a>
-            ) : (
-              <span class="tool-status">Coming soon</span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
   <section class="panel">
     <div class="panel-inner">
       <h2>Know what you are looking at.</h2>
