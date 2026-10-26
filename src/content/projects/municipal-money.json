@@ -1,0 +1,8 @@
+{
+  "title": "Municipal Money",
+  "summary": "Tool for exploring municipal budgets and spending.",
+  "maintainer": "Unconfirmed",
+  "url": "https://municipalmoney.gov.za/",
+  "tags": ["budgets", "municipalities"],
+  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Wazimap",
+  "summary": "Explorer for census and demographic data about South African places.",
+  "maintainer": "Unconfirmed",
+  "url": "https://wazimap.co.za/",
+  "tags": ["census", "demographics"],
+  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+}

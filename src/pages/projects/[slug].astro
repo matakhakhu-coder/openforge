@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+const { project } = Astro.props;
+const d = project.data;
+const checked = d.provenance.checkedOn ? d.provenance.checkedOn.toISOString().slice(0, 10) : 'never';
+---
+<Base title={d.title}>
+  <p class="meta"><a href="/projects/">All projects</a></p>
+  <h1>{d.title}</h1>
+  <p>{d.summary}</p>
+  <ul>
+    <li>Maintainer: {d.maintainer}</li>
+    <li>Project status: {d.projectStatus}</li>
+    <li>Website: <a href={d.url}>{d.url}</a></li>
+    {d.repo && <li>Code: <a href={d.repo}>{d.repo}</a></li>}
+  </ul>
+  <h2>Provenance</h2>
+  <p class="meta">
+    <span class={`badge ${d.provenance.status}`}>{d.provenance.status}</span>
+    / confidence: {d.provenance.confidence} / checked: {checked} / origin: {d.provenance.origin}
+  </p>
+  {d.provenance.notes && <p>{d.provenance.notes}</p>}
+</Base>

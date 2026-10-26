@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const projects = (await getCollection('projects')).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
+const hay = (d) => [d.title, d.summary, d.maintainer, d.tags.join(' ')].join(' ').toLowerCase();
+---
+<Base title="Projects">
+  <h1>Projects</h1>
+  <label for="q">Search projects</label>
+  <input id="q" type="search" placeholder="Try census or budgets" />
+  <p id="empty" class="meta" hidden>No projects match that search.</p>
+  <ul class="cards">
+    {projects.map((p) => (
+      <li class="card" data-search={hay(p.data)}>
+        <h2><a href={`/projects/${p.id}/`}>{p.data.title}</a></h2>
+        <p>{p.data.summary}</p>
+        <p class="meta">
+          {p.data.tags.join(', ')} /
+          <span class={`badge ${p.data.provenance.status}`}>{p.data.provenance.status}</span>
+        </p>
+      </li>
+    ))}
+  </ul>
+</Base>
+<script>
+  const input = document.getElementById('q') as HTMLInputElement;
+  const empty = document.getElementById('empty') as HTMLElement;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-search]'));
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    for (const li of items) {
+      const hit = !q || (li.dataset.search ?? '').includes(q);
+      li.hidden = !hit;
+      if (hit) shown++;
+    }
+    empty.hidden = shown !== 0;
+  });
+</script>
