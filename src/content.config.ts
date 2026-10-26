@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
@@ -41,18 +41,48 @@ const projects = defineCollection({
 // Lowercase kebab-case, so tags are already URL-safe.
 const tag = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Tags must be lowercase-kebab-case');
 
-// Blog posts are the author's own commentary. They carry no provenance rating.
+// An outside source a post relies on. Every external link in a post body must appear here.
+const sourceLink = z.object({
+  title: z.string(),
+  url: z.string().url().startsWith('https://'),
+  publisher: z.string(),
+  checkedOn: z.coerce.date(),
+});
+
+// Blog posts are the author's own commentary. They carry no provenance rating,
+// but every outside claim must point to a source, and published posts need a cover.
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
-  schema: z.object({
-    title: z.string().min(3),
-    description: z.string().min(10).max(200),
-    publishedDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    author: z.string().min(2).max(60).optional(),
-    tags: z.array(tag).default([]),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        title: z.string().min(3),
+        description: z.string().min(10).max(200),
+        publishedDate: z.coerce.date(),
+        updatedDate: z.coerce.date().optional(),
+        author: z.string().min(2).max(60).optional(),
+        tags: z.array(tag).default([]),
+        draft: z.boolean().default(false),
+        cover: z
+          .object({
+            image: image(),
+            alt: z.string().min(10).max(200),
+            credit: z.string(),
+            licence: z.enum(['own', 'cc-by', 'cc-by-sa', 'cc0', 'permission']),
+          })
+          .optional(),
+        mentions: z
+          .object({
+            resources: z.array(reference('resources')).default([]),
+            projects: z.array(reference('projects')).default([]),
+          })
+          .default({ resources: [], projects: [] }),
+        sources: z.array(sourceLink).default([]),
+      })
+      .refine((p) => p.draft || p.cover, {
+        message: 'Published posts need a cover',
+        path: ['cover'],
+      }),
 });
 
 export const collections = { resources, projects, posts };
