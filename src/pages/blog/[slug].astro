@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts } from '../../utils/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const iso = (x: Date) => x.toISOString().slice(0, 10);
+---
+<Base title={d.title}>
+  <a class="back" href="/blog/">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M17 10H3M9 4L3 10L9 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
+    All posts
+  </a>
+  <h1>{d.title}</h1>
+  <div class="meta post-meta">
+    {d.draft && <span class="badge unverified">draft</span>}
+    <span>{iso(d.publishedDate)}</span>
+    {d.author && <span>{d.author}</span>}
+    {d.updatedDate && <span>updated {iso(d.updatedDate)}</span>}
+  </div>
+  {d.tags.length > 0 && <div class="kicker post-tags">{d.tags.join(', ')}</div>}
+  <div class="prose">
+    <Content />
+  </div>
+</Base>

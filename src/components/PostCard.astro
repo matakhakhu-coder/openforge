@@ -1,0 +1,21 @@
+---
+import type { Post } from '../utils/content';
+interface Props { post: Post }
+const { post } = Astro.props;
+const d = post.data;
+const published = d.publishedDate.toISOString().slice(0, 10);
+const href = `/blog/${post.id}/`;
+---
+<li class="card">
+  <div class="card-top">
+    <span class="kicker">{d.tags.length ? d.tags.join(', ') : 'post'}</span>
+    {d.draft && <span class="badge unverified">draft</span>}
+  </div>
+  <h2><a href={href}>{d.title}</a></h2>
+  <p>{d.description}</p>
+  <div class="byline">{published}{d.author ? ` / ${d.author}` : ''}</div>
+  <a class="card-link" href={href}>
+    Read post
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M3 10H17M11 4L17 10L11 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
+  </a>
+</li>

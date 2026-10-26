@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../utils/content';
+const posts = await getPosts();
+---
+<Base title="Blog">
+  <h1>Blog</h1>
+  <p class="lede">Notes and commentary. Posts here are not directory entries and carry no status or confidence rating.</p>
+  {posts.length === 0 ? (
+    <p class="meta empty-note">No posts published yet.</p>
+  ) : (
+    <>
+      <div class="meta count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</div>
+      <ul class="cards">
+        {posts.map((post) => <PostCard post={post} />)}
+      </ul>
+    </>
+  )}
+</Base>
