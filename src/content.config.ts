@@ -85,4 +85,16 @@ const posts = defineCollection({
       }),
 });
 
-export const collections = { resources, projects, posts };
+// The author's own tools, shown on the home page. They are not directory entries and carry no provenance rating.
+const tools = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/tools' }),
+  schema: z.object({
+    title: z.string().min(2).max(60),
+    summary: z.string().min(10).max(140),
+    url: z.string().url().startsWith('https://').nullable().default(null),
+    order: z.number().int().positive().default(100),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { resources, projects, posts, tools };
