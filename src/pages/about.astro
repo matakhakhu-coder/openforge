@@ -1,6 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import ConfidenceMeter from '../components/ConfidenceMeter.astro';
 import { config } from '../config';
+const statuses = [
+  { status: 'unverified', text: 'Listed, but nobody has confirmed it yet.' },
+  { status: 'live', text: 'Checked and working on the date shown.' },
+  { status: 'moved', text: 'The publisher has pointed visitors somewhere else.' },
+  { status: 'dead', text: 'No longer reachable.' },
+] as const;
+const levels = ['low', 'medium', 'high'] as const;
 ---
 <Base title="About">
   <h1>About OpenForge</h1>
@@ -8,15 +17,29 @@ import { config } from '../config';
     OpenForge is a directory of South African civic data sources and tools. It points to other
     people's work. It does not host their data and is not an official source.
   </p>
+
   <h2>How entries are rated</h2>
   <p>Every entry carries a status, a confidence level and the date it was last checked.</p>
-  <ul>
-    <li><strong>unverified</strong>: listed, but nobody has confirmed it yet.</li>
-    <li><strong>live</strong>: checked and working on the date shown.</li>
-    <li><strong>moved</strong>: the publisher has pointed visitors somewhere else.</li>
-    <li><strong>dead</strong>: no longer reachable.</li>
+  <ul class="legend">
+    {statuses.map((s) => (
+      <li>
+        <div class="key"><StatusBadge status={s.status} /></div>
+        <p>{s.text}</p>
+      </li>
+    ))}
   </ul>
+
+  <h2>Confidence</h2>
   <p>Confidence is low, medium or high, and says how sure we are of the status above.</p>
+  <ul class="legend levels">
+    {levels.map((l) => (
+      <li>
+        <ConfidenceMeter level={l} />
+        <span class="level-label">{l}</span>
+      </li>
+    ))}
+  </ul>
+
   <h2>Notes</h2>
   <p>Entries marked unverified may be wrong. The date checked is the date the page for that entry was last opened and read.</p>
   {config.contactEmail && (

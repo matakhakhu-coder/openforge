@@ -5,37 +5,80 @@ const resources = await getCollection('resources');
 const projects = await getCollection('projects');
 const all = [...resources, ...projects];
 const checkedCount = all.filter((e) => e.data.provenance.checkedOn !== null).length;
+const rows = [
+  { n: '01', title: 'Resources', text: 'Gazettes, tenders, municipal finance and legal sources, each with a status.' },
+  { n: '02', title: 'Projects', text: 'The civic tools built on top of that data, and who maintains them.' },
+  { n: '03', title: 'Provenance', text: 'Moved, dead and unverified entries are shown as such, not hidden.' },
+];
 ---
 <Base title="South African civic data, with provenance">
   <section class="hero">
+    <svg class="hero-art" viewBox="0 0 342 248" role="img" aria-label="Three directory records, each with a status marker and a confidence meter">
+      <polygon points="0,0 310,0 342,32 342,248 0,248" fill="#121212" />
+      <polygon points="310,0 342,32 310,32" fill="#B8924A" />
+      <rect x="24" y="24" width="214" height="56" fill="#FDF6E3" />
+      <rect x="36" y="36" width="14" height="14" fill="#B8924A" />
+      <rect x="60" y="38" width="96" height="10" fill="#121212" />
+      <rect x="36" y="60" width="120" height="6" fill="#55585C" />
+      <rect x="194" y="38" width="8" height="8" fill="#B8924A" />
+      <rect x="206" y="38" width="8" height="8" fill="#B8924A" />
+      <rect x="218" y="38" width="8" height="8" fill="#B8924A" />
+      <rect x="64" y="96" width="214" height="56" fill="#D8D3CA" />
+      <path d="M77 115H89M84 110L89 115L84 120" stroke="#121212" stroke-width="2" fill="none" />
+      <rect x="100" y="110" width="96" height="10" fill="#121212" />
+      <rect x="76" y="132" width="120" height="6" fill="#55585C" />
+      <rect x="234" y="110" width="8" height="8" fill="#121212" />
+      <rect x="246" y="110" width="8" height="8" fill="#121212" />
+      <rect x="259" y="111" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
+      <rect x="104" y="168" width="214" height="56" fill="#FDF6E3" />
+      <rect x="117" y="181" width="12" height="12" fill="none" stroke="#121212" stroke-width="2" />
+      <rect x="140" y="182" width="96" height="10" fill="#121212" />
+      <rect x="116" y="204" width="120" height="6" fill="#55585C" />
+      <rect x="274" y="182" width="8" height="8" fill="#B8924A" />
+      <rect x="287" y="183" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
+      <rect x="299" y="183" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
+    </svg>
     <h1>Find South African civic data, and know how far to trust it.</h1>
     <p>
       OpenForge is a read-only directory of civic data sources and tools. Every entry says where
       it came from, when it was last checked, and how confident we are.
     </p>
-    <p>
-      <a class="button" href="/resources/">Browse resources</a>
+    <div class="actions">
+      <a class="button" href="/resources/">
+        Browse resources
+        <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 10H17M11 4L17 10L11 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
+      </a>
       <a class="button alt" href="/projects/">Browse projects</a>
-    </p>
-  </section>
-  <section class="pillars">
-    <div class="card">
-      <h2>Resources</h2>
-      <p>Gazettes, tenders, municipal finance and legal sources, each with a status.</p>
-    </div>
-    <div class="card">
-      <h2>Projects</h2>
-      <p>The civic tools built on top of that data, and who maintains them.</p>
-    </div>
-    <div class="card">
-      <h2>Provenance</h2>
-      <p>Moved, dead and unverified entries are shown as such, not hidden.</p>
     </div>
   </section>
-  <section class="stats">
-    <p class="meta">
-      {resources.length} resources / {projects.length} projects /
-      {checkedCount} of {all.length} entries checked
-    </p>
+
+  <section class="panel">
+    <div class="panel-inner">
+      <h2>Know what you are looking at.</h2>
+      <ul class="rows">
+        {rows.map((r) => (
+          <li>
+            <div class="num">{r.n}</div>
+            <h3>{r.title}</h3>
+            <p>{r.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="tiles" aria-label="Directory totals">
+    <div class="tile">
+      <div class="big">{resources.length}</div>
+      <div class="cap">{resources.length === 1 ? 'resource' : 'resources'}</div>
+    </div>
+    <div class="tile">
+      <div class="big">{projects.length}</div>
+      <div class="cap">{projects.length === 1 ? 'project' : 'projects'}</div>
+    </div>
+    <div class="tile accent">
+      <div class="big">{checkedCount}/{all.length}</div>
+      <div class="cap">checked</div>
+    </div>
   </section>
 </Base>

@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import ConfidenceMeter from '../../components/ConfidenceMeter.astro';
 import { getCollection } from 'astro:content';
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -8,21 +10,58 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const d = project.data;
 const checked = d.provenance.checkedOn ? d.provenance.checkedOn.toISOString().slice(0, 10) : 'never';
+const host = new URL(d.url).hostname.replace(/^www\./, '');
+const repoLabel = d.repo ? (() => { const u = new URL(d.repo); return u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/$/, ''); })() : null;
 ---
 <Base title={d.title}>
-  <p class="meta"><a href="/projects/">All projects</a></p>
+  <a class="back" href="/projects/">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M17 10H3M9 4L3 10L9 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
+    All projects
+  </a>
   <h1>{d.title}</h1>
+  <div class="detail-head">
+    <StatusBadge status={d.provenance.status} />
+    <span class="meta">checked {checked}</span>
+  </div>
   <p>{d.summary}</p>
-  <ul>
-    <li>Maintainer: {d.maintainer}</li>
-    <li>Project status: {d.projectStatus}</li>
-    <li>Website: <a href={d.url}>{d.url}</a></li>
-    {d.repo && <li>Code: <a href={d.repo}>{d.repo}</a></li>}
-  </ul>
+
+  <dl class="facts">
+    <div><dt>Maintainer</dt><dd>{d.maintainer}</dd></div>
+    <div><dt>Project status</dt><dd>{d.projectStatus}</dd></div>
+    <div><dt>Website</dt><dd><a href={d.url}>{host}</a></dd></div>
+    <div>
+      <dt>Code</dt>
+      {d.repo ? <dd><a href={d.repo}>{repoLabel}</a></dd> : <dd class="muted">Not listed</dd>}
+    </div>
+  </dl>
+
   <h2>Provenance</h2>
-  <p class="meta">
-    <span class={`badge ${d.provenance.status}`}>{d.provenance.status}</span>
-    / confidence: {d.provenance.confidence} / checked: {checked} / origin: {d.provenance.origin}
-  </p>
-  {d.provenance.notes && <p>{d.provenance.notes}</p>}
+  <div class="prov-grid">
+    <div class="prov-cell">
+      <div class="label">Status</div>
+      <div class="value"><StatusBadge status={d.provenance.status} /></div>
+    </div>
+    <div class="prov-cell">
+      <div class="label">Confidence</div>
+      <div class="value"><ConfidenceMeter level={d.provenance.confidence} />{d.provenance.confidence}</div>
+    </div>
+    <div class="prov-cell">
+      <div class="label">Checked</div>
+      <div class="value mono">{checked}</div>
+    </div>
+    <div class="prov-cell">
+      <div class="label">Origin</div>
+      <div class="value mono">{d.provenance.origin}</div>
+    </div>
+  </div>
+  {d.provenance.notes && (
+    <>
+      <div class="label note-label">Note</div>
+      <p class="note-text">{d.provenance.notes}</p>
+    </>
+  )}
+  <a class="button visit" href={d.url}>
+    Visit {host}
+    <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 10H17M11 4L17 10L11 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
+  </a>
 </Base>
