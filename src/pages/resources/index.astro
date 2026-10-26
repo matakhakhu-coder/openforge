@@ -16,7 +16,7 @@ const checked = (d) => (d ? d.toISOString().slice(0, 10) : 'never');
     {resources.map((r) => (
       <li class="card" data-search={hay(r.data)}>
         <h2><a href={r.data.url}>{r.data.title}</a></h2>
-        <p>{r.data.summary}</p>
+        <p>{r.data.summary}</p>{r.data.provenance.notes && <p class="meta">Note: {r.data.provenance.notes}</p>}
         <p class="meta">
           {r.data.category} / {r.data.publisher} /
           <span class={`badge ${r.data.provenance.status}`}>{r.data.provenance.status}</span>

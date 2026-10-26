@@ -5,5 +5,10 @@
   "publisher": "OpenUp",
   "url": "https://opengazettes.org.za/",
   "formats": ["web", "pdf"],
-  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+  "provenance": {
+    "status": "moved",
+    "confidence": "high",
+    "checkedOn": "2026-10-26",
+    "notes": "The site now shows a notice recommending gazettes.africa for up to date gazettes and warns of a redirect there."
+  }
 }

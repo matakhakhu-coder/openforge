@@ -14,7 +14,7 @@ Public, read-only portal of South African civic data sources and tools. Every en
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Scaffold and protocol | done |
-| 1 | Resource schema with provenance, directory and search | not started |
+| 1 | Resource schema with provenance, directory and search | done |
 | 2 | Projects catalog and detail pages | not started |
 | 3 | Landing and About | not started |
 | 4 | FORGE export adapter, off by default | not started |
