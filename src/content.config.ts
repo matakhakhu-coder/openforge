@@ -38,4 +38,21 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { resources, projects };
+// Lowercase kebab-case, so tags are already URL-safe.
+const tag = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Tags must be lowercase-kebab-case');
+
+// Blog posts are the author's own commentary. They carry no provenance rating.
+const posts = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
+  schema: z.object({
+    title: z.string().min(3),
+    description: z.string().min(10).max(200),
+    publishedDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    author: z.string().min(2).max(60).optional(),
+    tags: z.array(tag).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { resources, projects, posts };
