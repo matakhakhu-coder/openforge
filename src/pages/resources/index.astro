@@ -1,26 +1,44 @@
 ---
+import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const resources = (await getCollection('resources')).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
 );
+const hay = (d) => [d.title, d.summary, d.publisher, d.category].join(' ').toLowerCase();
+const checked = (d) => (d ? d.toISOString().slice(0, 10) : 'never');
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Resources | OpenForge</title>
-  </head>
-  <body>
-    <h1>Resources</h1>
-    <ul>
-      {resources.map((r) => (
-        <li>
-          <a href={r.data.url}>{r.data.title}</a> ({r.data.category}), {r.data.publisher}.
-          {r.data.summary}
-          Status: {r.data.provenance.status}, confidence: {r.data.provenance.confidence},
-          checked: {r.data.provenance.checkedOn ? r.data.provenance.checkedOn.toISOString().slice(0, 10) : 'never'}
-        </li>
-      ))}
-    </ul>
-  </body>
-</html>
+<Base title="Resources">
+  <h1>Resources</h1>
+  <label for="q">Search resources</label>
+  <input id="q" type="search" placeholder="Try gazette, tender or municipal" />
+  <p id="empty" class="meta" hidden>No resources match that search.</p>
+  <ul class="cards">
+    {resources.map((r) => (
+      <li class="card" data-search={hay(r.data)}>
+        <h2><a href={r.data.url}>{r.data.title}</a></h2>
+        <p>{r.data.summary}</p>
+        <p class="meta">
+          {r.data.category} / {r.data.publisher} /
+          <span class={`badge ${r.data.provenance.status}`}>{r.data.provenance.status}</span>
+          / confidence: {r.data.provenance.confidence}
+          / checked: {checked(r.data.provenance.checkedOn)}
+        </p>
+      </li>
+    ))}
+  </ul>
+</Base>
+<script>
+  const input = document.getElementById('q') as HTMLInputElement;
+  const empty = document.getElementById('empty') as HTMLElement;
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-search]'));
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    for (const li of items) {
+      const hit = !q || (li.dataset.search ?? '').includes(q);
+      li.hidden = !hit;
+      if (hit) shown++;
+    }
+    empty.hidden = shown !== 0;
+  });
+</script>
