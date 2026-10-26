@@ -156,3 +156,5 @@ body { overflow-x: clip; }
 .prose table { display: block; width: 100%; margin-top: 20px; overflow-x: auto; border-collapse: collapse; font-size: 15px; }
 .prose th, .prose td { text-align: left; padding: 8px 12px; border: 1px solid var(--warm-grey); }
 .prose th { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--slate); }
+/* blog: nav */
+.actions { flex-wrap: wrap; }

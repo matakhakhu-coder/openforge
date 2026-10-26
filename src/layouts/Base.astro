@@ -7,15 +7,19 @@ import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import Mark from '../components/Mark.astro';
+import { getPosts } from '../utils/content';
 
 interface Props { title: string }
 const { title } = Astro.props;
 
 const path = Astro.url.pathname.replace(/\/?$/, '/');
+// The Blog link appears only once at least one post is published (drafts count in dev only).
+const hasPosts = (await getPosts()).length > 0;
 const links = [
   { href: '/', label: 'Home' },
   { href: '/resources/', label: 'Resources' },
   { href: '/projects/', label: 'Projects' },
+  ...(hasPosts ? [{ href: '/blog/', label: 'Blog' }] : []),
   { href: '/about/', label: 'About' },
 ];
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));

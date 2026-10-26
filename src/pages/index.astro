@@ -1,8 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { getPosts } from '../utils/content';
 const resources = await getCollection('resources');
 const projects = await getCollection('projects');
+const hasPosts = (await getPosts()).length > 0;
 const all = [...resources, ...projects];
 const checkedCount = all.filter((e) => e.data.provenance.checkedOn !== null).length;
 const rows = [
@@ -49,6 +51,7 @@ const rows = [
         <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 10H17M11 4L17 10L11 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
       </a>
       <a class="button alt" href="/projects/">Browse projects</a>
+      {hasPosts && <a class="button alt" href="/blog/">Read the blog</a>}
     </div>
   </section>
 

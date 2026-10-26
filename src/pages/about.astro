@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import ConfidenceMeter from '../components/ConfidenceMeter.astro';
 import { config } from '../config';
+import { getPosts } from '../utils/content';
 const statuses = [
   { status: 'unverified', text: 'Listed, but nobody has confirmed it yet.' },
   { status: 'live', text: 'Checked and working on the date shown.' },
@@ -10,6 +11,7 @@ const statuses = [
   { status: 'dead', text: 'No longer reachable.' },
 ] as const;
 const levels = ['low', 'medium', 'high'] as const;
+const hasPosts = (await getPosts()).length > 0;
 ---
 <Base title="About">
   <h1>About OpenForge</h1>
@@ -42,6 +44,9 @@ const levels = ['low', 'medium', 'high'] as const;
 
   <h2>Notes</h2>
   <p>Entries marked unverified may be wrong. The date checked is the date the page for that entry was last opened and read.</p>
+  {hasPosts && (
+    <p>Posts on the <a href="/blog/">blog</a> are commentary by their author. They are not directory entries and carry no status or confidence rating.</p>
+  )}
   {config.contactEmail && (
     <p>Corrections and suggestions: <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a></p>
   )}
