@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+const resources = (await getCollection('resources')).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Resources | OpenForge</title>
+  </head>
+  <body>
+    <h1>Resources</h1>
+    <ul>
+      {resources.map((r) => (
+        <li>
+          <a href={r.data.url}>{r.data.title}</a> ({r.data.category}), {r.data.publisher}.
+          {r.data.summary}
+          Status: {r.data.provenance.status}, confidence: {r.data.provenance.confidence},
+          checked: {r.data.provenance.checkedOn ? r.data.provenance.checkedOn.toISOString().slice(0, 10) : 'never'}
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>

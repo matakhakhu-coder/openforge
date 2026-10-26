@@ -1,4 +1,4 @@
-﻿# OpenForge
+# OpenForge
 
 Public, read-only portal of South African civic data sources and tools. Every entry carries provenance.
 
@@ -26,3 +26,9 @@ Public, read-only portal of South African civic data sources and tools. Every en
 3. Flag deficits.
 4. Proceed one step at a time.
 
+
+## Flagged deficits
+
+| Deficit | Gate |
+|---|---|
+| npm audit reports critical Astro advisories on Astro 6 (fix is Astro 7.3.8 or newer) | Upgrade Node 22 to 22.23.4 or newer, then Astro 7, before the first deploy |

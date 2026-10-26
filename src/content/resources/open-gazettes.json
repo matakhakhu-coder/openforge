@@ -1,0 +1,9 @@
+{
+  "title": "Open Gazettes",
+  "summary": "Searchable archive of South African government gazettes.",
+  "category": "gazettes",
+  "publisher": "OpenUp",
+  "url": "https://opengazettes.org.za/",
+  "formats": ["web", "pdf"],
+  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+}
