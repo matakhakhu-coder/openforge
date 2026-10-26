@@ -1,28 +1,41 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import StatusBadge from '../../components/StatusBadge.astro';
+import ConfidenceMeter from '../../components/ConfidenceMeter.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+type Data = CollectionEntry<'resources'>['data'];
 const resources = (await getCollection('resources')).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
 );
-const hay = (d) => [d.title, d.summary, d.publisher, d.category].join(' ').toLowerCase();
-const checked = (d) => (d ? d.toISOString().slice(0, 10) : 'never');
+const hay = (d: Data) => [d.title, d.summary, d.publisher, d.category].join(' ').toLowerCase();
+const checked = (d: Date | null) => (d ? d.toISOString().slice(0, 10) : 'never');
+const total = resources.length;
 ---
 <Base title="Resources">
   <h1>Resources</h1>
+  <p class="lede">Open data sources, each with a status, a confidence level and the date it was last checked.</p>
   <label for="q">Search resources</label>
   <input id="q" type="search" placeholder="Try gazette, tender or municipal" />
+  <div id="count" class="meta count" aria-live="polite">{total} {total === 1 ? 'resource' : 'resources'}</div>
   <p id="empty" class="meta" hidden>No resources match that search.</p>
   <ul class="cards">
     {resources.map((r) => (
       <li class="card" data-search={hay(r.data)}>
+        <div class="card-top">
+          <span class="kicker">{r.data.category}</span>
+          <StatusBadge status={r.data.provenance.status} />
+        </div>
         <h2><a href={r.data.url}>{r.data.title}</a></h2>
-        <p>{r.data.summary}</p>{r.data.provenance.notes && <p class="meta">Note: {r.data.provenance.notes}</p>}
-        <p class="meta">
-          {r.data.category} / {r.data.publisher} /
-          <span class={`badge ${r.data.provenance.status}`}>{r.data.provenance.status}</span>
-          / confidence: {r.data.provenance.confidence}
-          / checked: {checked(r.data.provenance.checkedOn)}
-        </p>
+        <p>{r.data.summary}</p>
+        <div class="byline">{r.data.publisher}</div>
+        <div class="prov">
+          <div class="prov-row">
+            <span class="conf">confidence <ConfidenceMeter level={r.data.provenance.confidence} /> {r.data.provenance.confidence}</span>
+            <span>checked: {checked(r.data.provenance.checkedOn)}</span>
+          </div>
+          {r.data.provenance.notes && <p class="prov-note">Note: {r.data.provenance.notes}</p>}
+        </div>
       </li>
     ))}
   </ul>
@@ -30,6 +43,7 @@ const checked = (d) => (d ? d.toISOString().slice(0, 10) : 'never');
 <script>
   const input = document.getElementById('q') as HTMLInputElement;
   const empty = document.getElementById('empty') as HTMLElement;
+  const count = document.getElementById('count') as HTMLElement;
   const items = Array.from(document.querySelectorAll<HTMLElement>('[data-search]'));
   input.addEventListener('input', () => {
     const q = input.value.trim().toLowerCase();
@@ -39,6 +53,7 @@ const checked = (d) => (d ? d.toISOString().slice(0, 10) : 'never');
       li.hidden = !hit;
       if (hit) shown++;
     }
+    count.textContent = `${shown} ${shown === 1 ? 'resource' : 'resources'}`;
     empty.hidden = shown !== 0;
   });
 </script>

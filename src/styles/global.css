@@ -73,3 +73,17 @@ input::placeholder { color: var(--slate); opacity: 1; }
 .footer-nav a { display: inline-flex; align-items: center; height: 44px; color: var(--ivory); font-size: 16px; }
 .footer-nav a:hover { color: var(--brass); }
 .footer-meta { margin-top: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--warm-grey); }
+/* cards v2 */
+.lede { margin: 12px 0 0; font-size: 16px; line-height: 1.55; color: var(--slate); }
+.count { margin-top: 12px; }
+.badge { gap: 6px; }
+.badge svg { flex: none; }
+.card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--slate); }
+.byline { margin-top: 10px; font-family: var(--font-mono); font-size: 13px; color: var(--slate); }
+.prov { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--warm-grey); }
+.prov-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; font-family: var(--font-mono); font-size: 12px; color: var(--slate); }
+.conf { display: inline-flex; align-items: center; gap: 6px; }
+.conf svg { color: var(--charcoal); }
+.prov-note { font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: var(--slate); }
+.card-link { display: inline-flex; align-items: center; gap: 8px; height: 44px; margin-top: 6px; font-size: 16px; font-weight: 700; }
