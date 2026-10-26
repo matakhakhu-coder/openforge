@@ -17,7 +17,7 @@ Public, read-only portal of South African civic data sources and tools. Every en
 | 1 | Resource schema with provenance, directory and search | done |
 | 2 | Projects catalog and detail pages | done |
 | 3 | Landing and About | done |
-| 4 | FORGE export adapter, off by default | not started |
+| 4 | FORGE export adapter, off by default | importer done, FORGE exporter not started |
 
 ## Protocol
 
@@ -32,3 +32,11 @@ Public, read-only portal of South African civic data sources and tools. Every en
 | Deficit | Gate |
 |---|---|
 | npm audit reports critical Astro advisories on Astro 6 (fix is Astro 7.3.8 or newer) | Upgrade Node 22 to 22.23.4 or newer, then Astro 7, before the first deploy |
+
+## Rules
+
+| Rule | Detail |
+|---|---|
+| FORGE imports are add-only | The importer never edits an existing record and skips any URL already listed |
+| Imports arrive unverified | Imported records are forced to unverified, low confidence, no checked date |
+| Importer is off by default | scripts/forge-import.config.json must be switched on and given an inputPath |
