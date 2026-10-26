@@ -1,16 +1,41 @@
 ---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const resources = await getCollection('resources');
+const projects = await getCollection('projects');
+const all = [...resources, ...projects];
+const checkedCount = all.filter((e) => e.data.provenance.checkedOn !== null).length;
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="South African civic data, with provenance">
+  <section class="hero">
+    <h1>Find South African civic data, and know how far to trust it.</h1>
+    <p>
+      OpenForge is a read-only directory of civic data sources and tools. Every entry says where
+      it came from, when it was last checked, and how confident we are.
+    </p>
+    <p>
+      <a class="button" href="/resources/">Browse resources</a>
+      <a class="button alt" href="/projects/">Browse projects</a>
+    </p>
+  </section>
+  <section class="pillars">
+    <div class="card">
+      <h2>Resources</h2>
+      <p>Gazettes, tenders, municipal finance and legal sources, each with a status.</p>
+    </div>
+    <div class="card">
+      <h2>Projects</h2>
+      <p>The civic tools built on top of that data, and who maintains them.</p>
+    </div>
+    <div class="card">
+      <h2>Provenance</h2>
+      <p>Moved, dead and unverified entries are shown as such, not hidden.</p>
+    </div>
+  </section>
+  <section class="stats">
+    <p class="meta">
+      {resources.length} resources / {projects.length} projects /
+      {checkedCount} of {all.length} entries checked
+    </p>
+  </section>
+</Base>

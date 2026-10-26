@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import { config } from '../config';
+---
+<Base title="About">
+  <h1>About OpenForge</h1>
+  <p>
+    OpenForge is a directory of South African civic data sources and tools. It points to other
+    people's work. It does not host their data and is not an official source.
+  </p>
+  <h2>How entries are rated</h2>
+  <p>Every entry carries a status, a confidence level and the date it was last checked.</p>
+  <ul>
+    <li><strong>unverified</strong>: listed, but nobody has confirmed it yet.</li>
+    <li><strong>live</strong>: checked and working on the date shown.</li>
+    <li><strong>moved</strong>: the publisher has pointed visitors somewhere else.</li>
+    <li><strong>dead</strong>: no longer reachable.</li>
+  </ul>
+  <p>Confidence is low, medium or high, and says how sure we are of the status above.</p>
+  <h2>Notes</h2>
+  <p>Entries marked unverified may be wrong. The date checked is the date a person looked.</p>
+  {config.contactEmail && (
+    <p>Corrections and suggestions: <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a></p>
+  )}
+  {config.repoUrl && (
+    <p>Source code: <a href={config.repoUrl}>{config.repoUrl}</a></p>
+  )}
+</Base>
