@@ -1,7 +1,9 @@
 ---
+import { Image, getImage } from 'astro:assets';
+import { getEntries, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { config } from '../../config';
 import { getPosts } from '../../utils/content';
-import { render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -10,9 +12,37 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const d = post.data;
 const { Content } = await render(post);
-const iso = (x: Date) => x.toISOString().slice(0, 10);
+const day = (x: Date | null | undefined) => (x ? x.toISOString().slice(0, 10) : 'not checked');
+
+// Entries this post mentions, resolved from the references in its front matter.
+const resources = await getEntries(d.mentions.resources);
+const projects = await getEntries(d.mentions.projects);
+
+// Share image is a PNG, because some networks do not read WebP previews.
+const share = d.cover ? await getImage({ src: d.cover.image, format: 'png', width: 1200 }) : null;
+const licenceLabel = {
+  own: 'own work',
+  'cc-by': 'CC BY',
+  'cc-by-sa': 'CC BY-SA',
+  cc0: 'CC0',
+  permission: 'used with permission',
+} as const;
+
+// Where readers send a correction. Nothing is shown until one is set in src/config.ts.
+const contact = config.contactEmail
+  ? `mailto:${config.contactEmail}`
+  : config.repoUrl
+    ? `${config.repoUrl}/issues`
+    : null;
 ---
-<Base title={d.title}>
+<Base
+  title={d.title}
+  description={d.description}
+  type="article"
+  publishedDate={d.publishedDate}
+  updatedDate={d.updatedDate}
+  image={share && d.cover ? { src: share.src, alt: d.cover.alt } : undefined}
+>
   <a class="back" href="/blog/">
     <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="M17 10H3M9 4L3 10L9 16" stroke="currentColor" stroke-width="2" fill="none" /></svg>
     All posts
@@ -20,12 +50,59 @@ const iso = (x: Date) => x.toISOString().slice(0, 10);
   <h1>{d.title}</h1>
   <div class="meta post-meta">
     {d.draft && <span class="badge unverified">draft</span>}
-    <span>{iso(d.publishedDate)}</span>
+    <span>{day(d.publishedDate)}</span>
     {d.author && <span>{d.author}</span>}
-    {d.updatedDate && <span>updated {iso(d.updatedDate)}</span>}
+    {d.updatedDate && <span>updated {day(d.updatedDate)}</span>}
   </div>
   {d.tags.length > 0 && <div class="kicker post-tags">{d.tags.join(', ')}</div>}
+  {d.cover && (
+    <figure class="cover">
+      <Image src={d.cover.image} alt={d.cover.alt} width={1200} loading="eager" />
+      <figcaption class="meta">Cover: {d.cover.credit} ({licenceLabel[d.cover.licence]})</figcaption>
+    </figure>
+  )}
   <div class="prose">
     <Content />
   </div>
+
+  {d.sources.length > 0 && (
+    <section class="post-sources" aria-labelledby="sources-h">
+      <h2 id="sources-h">Sources</h2>
+      <p class="meta">Outside pages this post relies on, with the date each was last read.</p>
+      <ul class="source-list">
+        {d.sources.map((s) => (
+          <li>
+            <a href={s.url} rel="noopener">{s.title}</a>
+            <span class="meta">{s.publisher} / read {day(s.checkedOn)}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {resources.length + projects.length > 0 && (
+    <section class="post-mentions" aria-labelledby="mentions-h">
+      <h2 id="mentions-h">In the directory</h2>
+      <p class="meta">Entries this post mentions, with the status and confidence recorded for each.</p>
+      <ul class="source-list">
+        {resources.map((r) => (
+          <li>
+            <span class="mention-title">{r.data.title}</span>
+            <span class="meta">{r.data.publisher} / {r.data.provenance.status}, {r.data.provenance.confidence} confidence / checked {day(r.data.provenance.checkedOn)}</span>
+          </li>
+        ))}
+        {projects.map((p) => (
+          <li>
+            <a class="mention-title" href={`/projects/${p.id}/`}>{p.data.title}</a>
+            <span class="meta">{p.data.maintainer} / {p.data.provenance.status}, {p.data.provenance.confidence} confidence / checked {day(p.data.provenance.checkedOn)}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="meta mention-more"><a href="/resources/">Browse all resources</a></p>
+    </section>
+  )}
+
+  {contact && (
+    <p class="meta corrections">Spotted something out of date? <a href={contact}>Send a correction</a>.</p>
+  )}
 </Base>

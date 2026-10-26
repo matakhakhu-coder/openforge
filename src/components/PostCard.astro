@@ -1,12 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import type { Post } from '../utils/content';
 interface Props { post: Post }
 const { post } = Astro.props;
 const d = post.data;
 const published = d.publishedDate.toISOString().slice(0, 10);
 const href = `/blog/${post.id}/`;
+// The cover is decorative on a card (the title is the link text), so its alt is empty.
 ---
 <li class="card">
+  {d.cover && <Image class="card-cover" src={d.cover.image} alt="" width={600} />}
   <div class="card-top">
     <span class="kicker">{d.tags.length ? d.tags.join(', ') : 'post'}</span>
     {d.draft && <span class="badge unverified">draft</span>}

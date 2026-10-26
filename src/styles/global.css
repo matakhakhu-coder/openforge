@@ -158,3 +158,18 @@ body { overflow-x: clip; }
 .prose th { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--slate); }
 /* blog: nav */
 .actions { flex-wrap: wrap; }
+
+/* blog: cover, sources */
+.cover { margin: 20px 0 0; }
+.cover img { display: block; width: 100%; height: auto; border: 1px solid var(--warm-grey); }
+.cover figcaption { margin-top: 8px; }
+.card-cover { display: block; width: 100%; height: auto; margin: 0 0 14px; border: 1px solid var(--warm-grey); }
+.post-sources, .post-mentions { margin-top: 44px; border-top: 1px solid var(--warm-grey); }
+.post-sources h2, .post-mentions h2 { margin-top: 20px; font-size: 20px; }
+.source-list { list-style: none; margin: 12px 0 0; padding: 0; }
+.source-list li { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-top: 1px solid var(--warm-grey); }
+.source-list li:last-child { border-bottom: 1px solid var(--warm-grey); }
+.source-list a { display: inline-flex; align-items: center; min-height: 44px; }
+.source-list a, .mention-title { font-size: 17px; font-weight: 500; }
+.mention-more { margin-top: 12px; }
+.corrections { margin-top: 28px; }
