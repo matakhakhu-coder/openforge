@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { config } from '../config';
+import { activeSocialLinks } from '../utils/social';
+
+const email = config.contactEmail;
+const phone = config.contactPhone;
+const phoneHref = phone ? `tel:${phone.replace(/[^\d+]/g, '')}` : null;
+const hasSocial = activeSocialLinks().length > 0;
+const live = config.forms.contact;
+const showForm = live || import.meta.env.DEV;
+---
+<Base title="Contact" description="Contact OpenForge with corrections, suggestions and questions.">
+  <section class="contact">
+    <div class="contact-main">
+      <h1>Contact</h1>
+      <p>Corrections, suggestions and questions are welcome.</p>
+      {showForm ? (
+        <form class="contact-form" method="post" action="/api/contact" id="contact-form">
+          <div class="field">
+            <label for="c-name">Name</label>
+            <input id="c-name" name="name" type="text" required maxlength="80" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="c-email">Email</label>
+            <input id="c-email" name="email" type="email" required maxlength="254" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="c-org">Organisation (optional)</label>
+            <input id="c-org" name="organization" type="text" maxlength="120" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="c-message">Message</label>
+            <textarea id="c-message" name="message" required rows="6" maxlength="4000"></textarea>
+          </div>
+          <div class="sr-only" aria-hidden="true">
+            <label>Leave this field empty <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="check">
+            <input id="c-consent" name="consent" type="checkbox" required />
+            <label for="c-consent">I agree that my details may be used to reply to this message.</label>
+          </div>
+          <div data-turnstile></div>
+          <button class="button" type="submit" disabled={!live}>Send message</button>
+          <p data-status role="status" aria-live="polite" class="form-status">{!live && 'Preview only. The form is not connected yet.'}</p>
+        </form>
+      ) : (
+        <p class="notice">The message form is not available yet. Use the email address or phone number below.</p>
+      )}
+    </div>
+
+    <div class="contact-details">
+      <div>
+        <h2 class="label">Contact</h2>
+        {email && <p>Email: <a href={`mailto:${email}`}>{email}</a></p>}
+        {phone && phoneHref && <p>Phone: <a href={phoneHref}>{phone}</a></p>}
+      </div>
+      {hasSocial && (
+        <div>
+          <h2 class="label">Socials</h2>
+          <SocialLinks tone="light" />
+        </div>
+      )}
+    </div>
+
+    <svg class="contact-art" viewBox="0 0 520 580" aria-hidden="true" focusable="false">
+      <rect width="520" height="580" fill="#121212" />
+      <rect x="88" y="88" width="300" height="380" fill="#55585C" />
+      <rect x="116" y="116" width="300" height="380" fill="#D8D3CA" />
+      <polygon points="144,144 412,144 444,176 444,524 144,524" fill="#FDF6E3" />
+      <polygon points="412,144 444,176 412,176" fill="#B8924A" />
+      <rect x="176" y="184" width="120" height="14" fill="#B8924A" />
+      <rect x="176" y="224" width="236" height="8" fill="#55585C" />
+      <rect x="176" y="252" width="236" height="8" fill="#55585C" />
+      <rect x="176" y="280" width="200" height="8" fill="#55585C" />
+      <rect x="176" y="308" width="236" height="8" fill="#55585C" />
+      <rect x="176" y="336" width="160" height="8" fill="#55585C" />
+      <rect x="176" y="392" width="236" height="8" fill="#D8D3CA" />
+      <rect x="176" y="420" width="236" height="8" fill="#D8D3CA" />
+      <rect x="176" y="448" width="120" height="8" fill="#D8D3CA" />
+    </svg>
+  </section>
+</Base>

@@ -18,4 +18,6 @@ export const config = {
   shareNetworks: ['linkedin', 'bluesky'] as ('linkedin' | 'bluesky')[],
   // External embeds are off by default. When off, a post shows a plain link instead.
   embeds: { youtube: false },
+  // Contact form. Keep false until the message backend and the privacy page are live.
+  forms: { contact: false },
 };

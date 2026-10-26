@@ -45,6 +45,7 @@ const links = [
   { href: '/projects/', label: 'Projects' },
   ...(hasPosts ? [{ href: '/blog/', label: 'Blog' }] : []),
   { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
 ];
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 
