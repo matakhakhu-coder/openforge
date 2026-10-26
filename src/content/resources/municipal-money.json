@@ -1,9 +1,14 @@
 {
   "title": "Municipal Money",
-  "summary": "Municipal budget and spending data.",
+  "summary": "Municipal budget and spending data from National Treasury, with an open API.",
   "category": "municipal-finance",
   "publisher": "National Treasury",
   "url": "https://municipalmoney.gov.za/",
-  "formats": ["web"],
-  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+  "formats": ["web", "api"],
+  "provenance": {
+    "status": "live",
+    "confidence": "high",
+    "checkedOn": "2026-10-26",
+    "notes": "Homepage read on 2026-10-26. It shows 2026 Q2 figures and says the data is still being verified for completeness."
+  }
 }

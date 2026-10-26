@@ -1,9 +1,14 @@
 {
   "title": "Government Printing Works gazettes",
-  "summary": "Official publisher of the Government Gazette.",
+  "summary": "Official publisher of the Government Gazette, with eGazettes and Tenders sections.",
   "category": "gazettes",
   "publisher": "Government Printing Works",
   "url": "https://www.gpwonline.co.za/",
-  "formats": ["web", "pdf"],
-  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+  "formats": ["web"],
+  "provenance": {
+    "status": "live",
+    "confidence": "medium",
+    "checkedOn": "2026-10-26",
+    "notes": "Homepage read on 2026-10-26. The eGazettes and Tenders sections were linked but not opened."
+  }
 }

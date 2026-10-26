@@ -1,8 +1,15 @@
 {
   "title": "Municipal Money",
   "summary": "Tool for exploring municipal budgets and spending.",
-  "maintainer": "Unconfirmed",
+  "maintainer": "National Treasury",
   "url": "https://municipalmoney.gov.za/",
+  "repo": "https://github.com/OpenUpSA/municipal-data",
   "tags": ["budgets", "municipalities"],
-  "provenance": { "status": "unverified", "confidence": "low", "checkedOn": null }
+  "projectStatus": "active",
+  "provenance": {
+    "status": "live",
+    "confidence": "high",
+    "checkedOn": "2026-10-26",
+    "notes": "Homepage read on 2026-10-26. The site credits partner organisations, including OpenUp and Code for South Africa."
+  }
 }
