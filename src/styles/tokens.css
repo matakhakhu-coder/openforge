@@ -1,11 +1,19 @@
 :root {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --text: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
-  --accent: #34d399;
-  --accent-ink: #064e3b;
+  --charcoal: #121212;
+  --ivory: #FDF6E3;
+  --slate: #55585C;
+  --warm-grey: #D8D3CA;
+  --brass: #B8924A;
+
+  /* legacy names kept so existing pages keep working */
+  --bg: var(--ivory);
+  --surface: var(--ivory);
+  --text: var(--charcoal);
+  --muted: var(--slate);
+  --border: var(--warm-grey);
+  --accent: var(--brass);
+  --accent-ink: var(--charcoal);
+
   --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }

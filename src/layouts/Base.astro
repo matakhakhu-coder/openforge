@@ -3,24 +3,90 @@ import '@fontsource/ibm-plex-sans/400.css';
 import '@fontsource/ibm-plex-sans/500.css';
 import '@fontsource/ibm-plex-sans/700.css';
 import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import Mark from '../components/Mark.astro';
+
+interface Props { title: string }
 const { title } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/resources/', label: 'Resources' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/about/', label: 'About' },
+];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+const entries = [...(await getCollection('resources')), ...(await getCollection('projects'))];
+const dates = entries
+  .map((e) => e.data.provenance.checkedOn)
+  .filter((d): d is Date => d !== null);
+const lastChecked = dates.length
+  ? new Date(Math.max(...dates.map((d) => d.getTime()))).toISOString().slice(0, 10)
+  : null;
 ---
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <title>{title} | OpenForge</title>
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
-        <a class="brand" href="/"><span>OpenForge</span></a>
-        <nav><a href="/resources/">Resources</a> <a href="/projects/">Projects</a> <a href="/about/">About</a></nav>
+      <div class="wrap header-bar">
+        <a class="brand" href="/" aria-label="OpenForge home">
+          <Mark size={32} />
+          <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
+        </a>
+        <button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+          <svg class="i-open" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <rect x="2" y="5" width="20" height="2" fill="currentColor" />
+            <rect x="2" y="11" width="20" height="2" fill="currentColor" />
+            <rect x="2" y="17" width="20" height="2" fill="currentColor" />
+          </svg>
+          <svg class="i-close" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path d="M5 5L19 19M19 5L5 19" stroke="currentColor" stroke-width="2.5" fill="none" />
+          </svg>
+        </button>
+        <nav id="site-nav" class="site-nav" aria-label="Main">
+          {links.map((l) => (
+            <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+          ))}
+        </nav>
       </div>
     </header>
     <main class="wrap">
       <slot />
     </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="brand">
+          <Mark size={32} />
+          <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
+        </div>
+        <p>OpenForge points to other people's work. It does not host their data and is not an official source.</p>
+        <nav class="footer-nav" aria-label="Footer">
+          {links.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+        {lastChecked && <div class="footer-meta">Entries last checked {lastChecked}</div>}
+      </div>
+    </footer>
   </body>
 </html>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.getElementById('site-nav');
+  if (btn && nav) {
+    const set = (open: boolean) => {
+      btn.setAttribute('aria-expanded', String(open));
+      nav.toggleAttribute('data-open', open);
+    };
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+  }
+</script>
