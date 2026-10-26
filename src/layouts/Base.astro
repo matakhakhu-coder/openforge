@@ -7,6 +7,7 @@ import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import Mark from '../components/Mark.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { getPosts } from '../utils/content';
 
 interface Props {
@@ -116,6 +117,7 @@ const lastChecked = dates.length
         <nav class="footer-nav" aria-label="Footer">
           {links.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
+        <SocialLinks />
         {lastChecked && <div class="footer-meta">Entries last checked {lastChecked}</div>}
       </div>
     </footer>

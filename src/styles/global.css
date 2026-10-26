@@ -225,3 +225,12 @@ body { overflow-x: clip; }
   .hero .actions { gap: var(--space-1h); }
   .hero .button { min-height: 52px; height: 52px; }
 }
+
+/* social links */
+.social { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1h); }
+.social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--warm-grey); color: var(--ivory); background: transparent; }
+.social a:hover { background: var(--brass); border-color: var(--brass); color: var(--charcoal); }
+.social .icon { display: block; width: 20px; height: 20px; }
+.social .icon svg { display: block; width: 100%; height: 100%; }
+.social.light a { border-color: var(--charcoal); color: var(--charcoal); }
+.social.light a:hover { background: var(--brass); border-color: var(--brass); color: var(--charcoal); }

@@ -1,0 +1,17 @@
+---
+import { activeSocialLinks } from '../utils/social';
+interface Props { tone?: 'dark' | 'light' }
+const { tone = 'dark' } = Astro.props;
+const links = activeSocialLinks();
+---
+{links.length > 0 && (
+  <ul class:list={['social', tone === 'light' && 'light']} aria-label="Social links">
+    {links.map((link) => (
+      <li>
+        <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} (opens in a new tab)`}>
+          <span class="icon" set:html={link.svg} />
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
