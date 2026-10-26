@@ -1,0 +1,27 @@
+﻿# OpenForge
+
+Public, read-only portal of South African civic data sources and tools. Every entry carries provenance.
+
+| Item | Value |
+|---|---|
+| Stack | Astro, content collections, Vercel |
+| Repo path | C:\Users\matam\Projects\openforge |
+| Data | JSON/MDX files in src/content, no backend in v1 |
+| Rule | Any external dependency is a mechanism with a config switch, never hardcoded |
+
+## Phases
+
+| Phase | Scope | Status |
+|---|---|---|
+| 0 | Scaffold and protocol | in progress |
+| 1 | Resource schema with provenance, directory and search | not started |
+| 2 | Projects catalog and detail pages | not started |
+| 3 | Landing and About | not started |
+| 4 | FORGE export adapter, off by default | not started |
+
+## Protocol
+
+1. Audit what exists.
+2. Weigh the options.
+3. Flag deficits.
+4. Proceed one step at a time.
