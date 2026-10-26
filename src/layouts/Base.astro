@@ -39,7 +39,7 @@ const path = Astro.url.pathname.replace(/\/?$/, '/');
 // The Blog link appears only once at least one post is published (drafts count in dev only).
 const hasPosts = (await getPosts()).length > 0;
 const links = [
-  { href: '/', label: 'Home' },
+  
   { href: '/resources/', label: 'Resources' },
   { href: '/projects/', label: 'Projects' },
   ...(hasPosts ? [{ href: '/blog/', label: 'Blog' }] : []),
@@ -81,7 +81,7 @@ const lastChecked = dates.length
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap header-bar">
+      <div class="wrap wrap-wide header-bar">
         <a class="brand" href="/" aria-label="OpenForge home">
           <Mark size={32} />
           <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
@@ -107,7 +107,7 @@ const lastChecked = dates.length
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="wrap">
+      <div class="wrap wrap-wide">
         <div class="brand">
           <Mark size={32} />
           <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
