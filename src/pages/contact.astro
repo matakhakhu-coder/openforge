@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import contactArt from '../assets/illustrations/contact.webp';
 import SocialLinks from '../components/SocialLinks.astro';
 import { config } from '../config';
 import { activeSocialLinks } from '../utils/social';
@@ -66,22 +68,7 @@ const showForm = live || import.meta.env.DEV;
       )}
     </div>
 
-    <svg class="contact-art" viewBox="0 0 520 580" aria-hidden="true" focusable="false">
-      <rect width="520" height="580" fill="#121212" />
-      <rect x="88" y="88" width="300" height="380" fill="#55585C" />
-      <rect x="116" y="116" width="300" height="380" fill="#D8D3CA" />
-      <polygon points="144,144 412,144 444,176 444,524 144,524" fill="#FDF6E3" />
-      <polygon points="412,144 444,176 412,176" fill="#B8924A" />
-      <rect x="176" y="184" width="120" height="14" fill="#B8924A" />
-      <rect x="176" y="224" width="236" height="8" fill="#55585C" />
-      <rect x="176" y="252" width="236" height="8" fill="#55585C" />
-      <rect x="176" y="280" width="200" height="8" fill="#55585C" />
-      <rect x="176" y="308" width="236" height="8" fill="#55585C" />
-      <rect x="176" y="336" width="160" height="8" fill="#55585C" />
-      <rect x="176" y="392" width="236" height="8" fill="#D8D3CA" />
-      <rect x="176" y="420" width="236" height="8" fill="#D8D3CA" />
-      <rect x="176" y="448" width="120" height="8" fill="#D8D3CA" />
-    </svg>
+    <Image class="contact-art" src={contactArt} alt="Two people exchange civic information, with a public building and message symbol between them." width={799} format="webp" loading="lazy" />
   </section>
 <script>
     import '../scripts/submit-form';

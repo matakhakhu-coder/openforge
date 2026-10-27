@@ -5,6 +5,7 @@ import heroArt from '../assets/illustrations/home-hero.png';
 import surfaceArt from '../assets/illustrations/surface.png';
 import linkArt from '../assets/illustrations/link.png';
 import buildArt from '../assets/illustrations/build.png';
+import teachArt from '../assets/illustrations/teach.png';
 import { getCollection } from 'astro:content';
 import { getTools } from '../utils/tools';
 const resources = await getCollection('resources');
@@ -21,7 +22,7 @@ const pillars = [
   { n: '01', title: 'Surface', text: 'Find civic data sources that are scattered and hard to reach.', image: surfaceArt },
   { n: '02', title: 'Link', text: 'Connect useful sources with the projects and people who use them.', image: linkArt },
   { n: '03', title: 'Build', text: 'Explore civic information through practical tools such as ForgeMap.', image: buildArt },
-  { n: '04', title: 'Teach', text: 'Learn what the data says, where it came from, and how far to trust it.', image: null },
+  { n: '04', title: 'Teach', text: 'Learn what the data says, where it came from, and how far to trust it.', image: teachArt },
 ];
 ---
 <Base title="Moving everything within reach | OpenForge">

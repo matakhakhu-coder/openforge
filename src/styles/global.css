@@ -266,7 +266,7 @@ body { overflow-x: clip; }
 .contact-details h2 { margin: 0 0 var(--space-1); font-weight: 400; }
 .contact-details p { margin: 4px 0 0; font-size: 17px; }
 .contact-details .social { margin-top: var(--space-1h); }
-.contact-art { display: block; width: 100%; max-width: 327px; height: auto; aspect-ratio: 520 / 580; margin: 0; }
+.contact-art { display: block; width: 100%; max-width: 327px; height: auto; aspect-ratio: auto; margin: 0; }
 
 @media (min-width: 60rem) {
   .contact { grid-template-columns: 1.1fr 0.9fr; column-gap: var(--space-10); row-gap: var(--space-8); padding-top: var(--space-8); padding-bottom: var(--space-10); }
