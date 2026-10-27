@@ -9,7 +9,7 @@ const email = config.contactEmail;
 const phone = config.contactPhone;
 const phoneHref = phone ? `tel:${phone.replace(/[^\d+]/g, '')}` : null;
 const hasSocial = activeSocialLinks().length > 0;
-const live = config.forms.contact;
+const live = config.forms.contact || import.meta.env.DEV;
 const showForm = live || import.meta.env.DEV;
 ---
 <Base title="Contact" description="Contact OpenForge with corrections, suggestions and questions.">
@@ -40,7 +40,7 @@ const showForm = live || import.meta.env.DEV;
           </div>
           <div class="check">
             <input id="c-consent" name="consent" type="checkbox" required />
-            <label for="c-consent">I agree that my details may be used to reply to this message.</label>
+            <label for="c-consent">I agree that my details may be used to reply to this message, and that they are processed by providers that may be outside South Africa. See the <a href="/privacy/">privacy policy</a>.</label>
           </div>
           <div data-turnstile></div>
           <button class="button" type="submit" disabled={!live}>Send message</button>

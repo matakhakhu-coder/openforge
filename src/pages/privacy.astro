@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import { config } from '../config';
+
+const { responsibleParty, lastUpdated, messageRetentionDays } = config.privacy;
+const email = config.contactEmail;
+const isDraft = responsibleParty === '' || !email;
+---
+<Base title="Privacy policy" description="What personal information OpenForge collects, why, who it is shared with, and your rights under POPIA.">
+  <h1>Privacy policy</h1>
+  <p>
+    How OpenForge handles personal information, in line with South Africa's Protection of Personal
+    Information Act (POPIA). Last updated: {lastUpdated}.
+  </p>
+
+  {isDraft && (
+    <p class="notice">Draft policy. Add the responsible party and a contact email in src/config.ts before launch.</p>
+  )}
+
+  <div class="prose">
+    <h2>Who is responsible</h2>
+    <p>
+      {responsibleParty} is the responsible party for personal information collected through this
+      site. Send privacy questions and requests to
+      {' '}{email ? <a href={`mailto:${email}`}>{email}</a> : '(email not added yet)'}.
+    </p>
+
+    <h2>What we collect and why</h2>
+
+    <h3>Visiting the site</h3>
+    <p>
+      Our hosting provider, Vercel, processes technical data such as your IP address, browser type
+      and the pages you request, so that the site can be delivered and kept secure. We do not run
+      analytics or advertising trackers.
+    </p>
+
+    <h3>The contact form</h3>
+    <p>
+      If you send a message through the contact form, we collect your name, your email address,
+      optionally your organisation, your message, and a record that you ticked the consent box, with
+      the time. We use these to read and reply to your message, and for nothing else. Each message is
+      stored as a private issue in a GitHub repository that only the site owner can open, and GitHub
+      emails the owner a notice of it.
+    </p>
+
+    <h3>Email and phone</h3>
+    <p>If you email or phone us instead, we use the details you give to reply.</p>
+
+    <h3>Security check</h3>
+    <p>
+      The contact form uses Cloudflare Turnstile to tell people from bots. It loads from Cloudflare
+      only when you start filling in the form. Cloudflare processes information about your browser
+      and device for that purpose, under its own privacy policy.
+    </p>
+
+    <h2>Our legal basis</h2>
+    <p>
+      We process the information in your message with your consent. We also process technical data
+      where it is needed to run and secure the site, which is a legitimate interest that does not
+      unreasonably affect your privacy.
+    </p>
+
+    <h2>Who we share it with</h2>
+    <p>We do not sell personal information. These providers process it for us:</p>
+    <ul>
+      <li>Vercel: hosting.</li>
+      <li>GitHub: the private repository that holds incoming messages.</li>
+      <li>Google (Gmail): receiving notices of new messages and sending replies.</li>
+      <li>Cloudflare: the Turnstile security check.</li>
+    </ul>
+
+    <h2>Transfers outside South Africa</h2>
+    <p>
+      These providers may store and process information in other countries, including the United
+      States. We cannot control where they keep it, so the form asks for your consent and names this
+      transfer before you send anything.
+    </p>
+
+    <h2>How long we keep it</h2>
+    <ul>
+      <li>
+        Messages: kept until the conversation has ended, then deleted from the inbox within {messageRetentionDays} days. Email copies of the notice and our replies are deleted on the
+        same schedule.
+      </li>
+      <li>Server logs: kept by our hosting provider under its own retention schedule.</li>
+    </ul>
+
+    <h2>Security</h2>
+    <p>
+      Access to the inbox is limited to the site owner, and the site connects to it with an access
+      token limited to that one repository. No system is completely secure. If a breach affects your
+      personal information, we will notify the Information Regulator and, where required, you.
+    </p>
+
+    <h2>Your rights</h2>
+    <ul>
+      <li>Ask what personal information we hold about you.</li>
+      <li>Ask us to correct or delete it.</li>
+      <li>
+        Object to processing, or withdraw your consent at any time, by emailing us. Withdrawing does
+        not affect processing that already happened lawfully.
+      </li>
+      <li>
+        Complain to the Information Regulator at{' '}<a href="https://inforegulator.org.za" rel="noopener noreferrer">inforegulator.org.za</a>.
+        We would appreciate the chance to fix the problem first.
+      </li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>This site is not intended for children under 18, and they should not use the contact form.</p>
+
+    <h2>Changes</h2>
+    <p>We may update this policy. The date at the top shows the latest version.</p>
+  </div>
+</Base>
