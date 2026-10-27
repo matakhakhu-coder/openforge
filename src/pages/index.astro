@@ -1,5 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import heroArt from '../assets/illustrations/home-hero.png';
+import surfaceArt from '../assets/illustrations/surface.png';
+import linkArt from '../assets/illustrations/link.png';
+import buildArt from '../assets/illustrations/build.png';
 import { getCollection } from 'astro:content';
 import { getTools } from '../utils/tools';
 const resources = await getCollection('resources');
@@ -12,38 +17,21 @@ const rows = [
   { n: '02', title: 'Projects', text: 'The civic tools built on top of that data, and who maintains them.' },
   { n: '03', title: 'Provenance', text: 'Moved, dead and unverified entries are shown as such, not hidden.' },
 ];
+const pillars = [
+  { n: '01', title: 'Surface', text: 'Find civic data sources that are scattered and hard to reach.', image: surfaceArt },
+  { n: '02', title: 'Link', text: 'Connect useful sources with the projects and people who use them.', image: linkArt },
+  { n: '03', title: 'Build', text: 'Explore civic information through practical tools such as ForgeMap.', image: buildArt },
+  { n: '04', title: 'Teach', text: 'Learn what the data says, where it came from, and how far to trust it.', image: null },
+];
 ---
-<Base title="South African civic data, with provenance">
+<Base title="Moving everything within reach | OpenForge">
   <section class="hero">
-    <svg class="hero-art" viewBox="0 0 342 248" role="img" aria-label="Three directory records, each with a status marker and a confidence meter">
-      <polygon points="0,0 310,0 342,32 342,248 0,248" fill="#121212" />
-      <polygon points="310,0 342,32 310,32" fill="#B8924A" />
-      <rect x="24" y="24" width="214" height="56" fill="#FDF6E3" />
-      <rect x="36" y="36" width="14" height="14" fill="#B8924A" />
-      <rect x="60" y="38" width="96" height="10" fill="#121212" />
-      <rect x="36" y="60" width="120" height="6" fill="#55585C" />
-      <rect x="194" y="38" width="8" height="8" fill="#B8924A" />
-      <rect x="206" y="38" width="8" height="8" fill="#B8924A" />
-      <rect x="218" y="38" width="8" height="8" fill="#B8924A" />
-      <rect x="64" y="96" width="214" height="56" fill="#D8D3CA" />
-      <path d="M77 115H89M84 110L89 115L84 120" stroke="#121212" stroke-width="2" fill="none" />
-      <rect x="100" y="110" width="96" height="10" fill="#121212" />
-      <rect x="76" y="132" width="120" height="6" fill="#55585C" />
-      <rect x="234" y="110" width="8" height="8" fill="#121212" />
-      <rect x="246" y="110" width="8" height="8" fill="#121212" />
-      <rect x="259" y="111" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
-      <rect x="104" y="168" width="214" height="56" fill="#FDF6E3" />
-      <rect x="117" y="181" width="12" height="12" fill="none" stroke="#121212" stroke-width="2" />
-      <rect x="140" y="182" width="96" height="10" fill="#121212" />
-      <rect x="116" y="204" width="120" height="6" fill="#55585C" />
-      <rect x="274" y="182" width="8" height="8" fill="#B8924A" />
-      <rect x="287" y="183" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
-      <rect x="299" y="183" width="6" height="6" fill="none" stroke="#121212" stroke-width="2" />
-    </svg>
-    <h1>Find South African civic data, and know how far to trust it.</h1>
+    <Image class="hero-art" src={heroArt} alt="A person uses a phone map to find civic services and public records." width={799} format="webp" loading="eager" />
+    <h1>Moving everything within reach.</h1>
     <p>
-      OpenForge is a read-only directory of civic data sources and tools. Every entry says where
-      it came from, when it was last checked, and how confident we are.
+      South Africa’s civic data is out there, but it’s buried and confusing. OpenForge surfaces
+      the sources, links the tools, and teaches you how to use them — so you know what exists and
+      how far to trust it.
     </p>
     <div class="actions">
       <a class="button" href="/resources/">
@@ -72,6 +60,28 @@ const rows = [
         </ul>
       </section>
     )}
+  </section>
+
+  <section class="approach-section" aria-labelledby="approach-heading">
+    <h2 id="approach-heading">What OpenForge does</h2>
+    <ul class="approach-cards">
+      {pillars.map((pillar) => (
+        <li class="approach-card">
+          <div class="approach-visual">
+            {pillar.image ? (
+              <Image src={pillar.image} alt="" width={360} format="webp" loading="lazy" />
+            ) : (
+              <span class="approach-number" aria-hidden="true">{pillar.n}</span>
+            )}
+          </div>
+          <div class="approach-copy">
+            <span class="approach-kicker">{pillar.n}</span>
+            <h3>{pillar.title}</h3>
+            <p>{pillar.text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
   </section>
 
   <section class="panel">
