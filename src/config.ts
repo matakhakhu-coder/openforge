@@ -18,8 +18,8 @@ export const config = {
   shareNetworks: ['linkedin', 'bluesky'] as ('linkedin' | 'bluesky')[],
   // External embeds are off by default. When off, a post shows a plain link instead.
   embeds: { youtube: false },
-  // Contact form. Keep false until the message backend and the privacy page are live.
-  forms: { contact: false },
+  // Contact form. Set to false to close it. The page then shows only the email and phone.
+  forms: { contact: true },
   // Shown on the privacy page. Update lastUpdated whenever the policy changes.
   privacy: { responsibleParty: 'K2026598376 (South Africa) (Pty) Ltd', lastUpdated: '2026-10-27', messageRetentionDays: 365 },
 };
