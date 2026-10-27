@@ -8,7 +8,7 @@ import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import Mark from '../components/Mark.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import { getPosts } from '../utils/content';
+import { config } from '../config';
 
 interface Props {
   title: string;
@@ -37,14 +37,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const imageUrl = image ? new URL(image.src, Astro.site).href : null;
 
 const path = Astro.url.pathname.replace(/\/?$/, '/');
-// The Blog link appears only once at least one post is published (drafts count in dev only).
-const hasPosts = (await getPosts()).length > 0;
 const links = [
-  
-  { href: '/resources/', label: 'Resources' },
   { href: '/projects/', label: 'Projects' },
-  ...(hasPosts ? [{ href: '/blog/', label: 'Blog' }] : []),
   { href: '/about/', label: 'About' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/jobs/', label: 'Jobs' },
   { href: '/contact/', label: 'Contact' },
 ];
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
@@ -109,17 +106,34 @@ const lastChecked = dates.length
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="wrap wrap-wide">
-        <div class="brand">
-          <Mark size={32} />
-          <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
+      <div class="wrap wrap-wide footer-shell">
+        <div class="footer-columns">
+          <div class="footer-brand">
+            <div class="brand">
+              <Mark size={32} />
+              <span class="wordmark"><span class="w-open">Open</span><span class="w-forge">Forge</span></span>
+            </div>
+          </div>
+          <section aria-labelledby="footer-about-title">
+            <h2 id="footer-about-title">About us</h2>
+            <p>OpenForge points to other people's work. It does not host their data and is not an official source.</p>
+          </section>
+          <nav class="footer-nav" aria-labelledby="footer-links-title">
+            <h2 id="footer-links-title">Useful links</h2>
+            {links.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href="/privacy/">Privacy</a>
+          </nav>
+          <section class="footer-contact" aria-labelledby="footer-contact-title">
+            <h2 id="footer-contact-title">Contact</h2>
+            {config.contactEmail && <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a>}
+            {config.contactPhone && <a href={`tel:${config.contactPhone.replace(/[^\d+]/g, '')}`}>{config.contactPhone}</a>}
+            <a class="footer-mailing" href="/about/#newsletter">Join our mailing list</a>
+          </section>
         </div>
-        <p>OpenForge points to other people's work. It does not host their data and is not an official source.</p>
-        <nav class="footer-nav" aria-label="Footer">
-          {links.map((l) => <a href={l.href}>{l.label}</a>)}
-          <a href="/privacy/">Privacy</a>
-        </nav>
-        <SocialLinks />
+        <div class="footer-bottom">
+          {config.repoUrl && <a href={config.repoUrl}>Source code</a>}
+          <SocialLinks />
+        </div>
         {lastChecked && <div class="footer-meta">Entries last checked {lastChecked}</div>}
       </div>
     </footer>

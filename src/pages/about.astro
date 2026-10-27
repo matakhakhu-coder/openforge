@@ -1,56 +1,197 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import StatusBadge from '../components/StatusBadge.astro';
-import ConfidenceMeter from '../components/ConfidenceMeter.astro';
 import { config } from '../config';
 import { getPosts } from '../utils/content';
-const statuses = [
-  { status: 'unverified', text: 'Listed, but nobody has confirmed it yet.' },
-  { status: 'live', text: 'Checked and working on the date shown.' },
-  { status: 'moved', text: 'The publisher has pointed visitors somewhere else.' },
-  { status: 'dead', text: 'No longer reachable.' },
-] as const;
-const levels = ['low', 'medium', 'high'] as const;
-const hasPosts = (await getPosts()).length > 0;
+
+const posts = (await getPosts()).slice(0, 3);
+const email = config.contactEmail;
+const companies = Array.from({ length: 10 }, (_, index) => index + 1);
+const profiles = Array.from({ length: 11 }, (_, index) => index + 1);
+const howWeWork = [
+  { title: 'Checked, not assumed', text: 'Every entry shows its status, confidence level and last-checked date.' },
+  { title: 'Points to the source', text: 'We link to the publisher. We do not host their data and are not an official source.' },
+  { title: 'Built in the open', text: 'Our own tools, starting with ForgeMap, are listed beside others and marked as built by OpenForge. Source code is public.' },
+  { title: 'Honest about gaps', text: 'Coverage is partial. We say what we checked, not what exists.' },
+];
+const questions = [
+  { q: 'What is OpenForge?', a: 'OpenForge is a directory of South African civic data sources and tools. Entries show where they point, their status, confidence and last-checked date.' },
+  { q: 'What counts as a civic data source?', a: 'Examples in the directory include gazettes, tenders, municipal finance and legal sources.' },
+  { q: 'Why do status and confidence matter?', a: 'Status describes whether a link is listed, working, moved or no longer reachable. Confidence says how sure we are of that status.' },
+  { q: 'Who is behind OpenForge?', a: 'OpenForge points to other people’s work, does not host their data and is not an official or government source.' },
+  { q: 'Where does OpenForge cover?', a: 'OpenForge is a directory of South African civic data sources and tools.' },
+  { q: 'Does OpenForge build tools?', a: 'Yes. OpenForge’s own tools are listed beside other projects and identified as built by OpenForge. ForgeMap is one of those tools.' },
+  { q: 'How do I suggest a correction or a resource?', a: `Email ${email ?? 'OpenForge'} with a correction or suggestion.` },
+];
+const subscribeHref = email
+  ? `mailto:${email}?subject=Subscribe%20to%20OpenForge%20updates&body=Please%20add%20me%20to%20the%20OpenForge%20updates%20mailing%20list.`
+  : '/contact/';
 ---
-<Base title="About">
-  <h1>About OpenForge</h1>
-  <p>
-    OpenForge is a directory of South African civic data sources and tools. It points to other
-    people's work. It does not host their data and is not an official source.
-  </p>
+<Base title="About" description="How OpenForge describes and links to South African civic data sources and tools.">
+  <div class="about-page">
+    <section class="about-shell about-hero" aria-labelledby="about-title">
+      <div class="about-hero-copy">
+        <p class="about-eyebrow">About OpenForge</p>
+        <h1 id="about-title">Civic data you can trace.</h1>
+        <p>OpenForge is a directory of South African civic data sources and tools, including tools it builds itself. Every entry shows where it points, whether it works, and how sure we are.</p>
+        <div class="about-actions"><a class="about-button" href="#how-we-work">How we work</a><a class="about-button about-button-alt" href="#meet-the-team">Meet the team</a></div>
+      </div>
+      <svg class="about-hero-art" viewBox="0 0 520 420" role="img" aria-labelledby="about-art-title about-art-desc">
+        <title id="about-art-title">Civic records linked to their sources</title>
+        <desc id="about-art-desc">Three record cards sit beside a simple civic building and are joined by a traceable line.</desc>
+        <path d="M34 44h452v332H34z" fill="var(--charcoal)"/><path d="M386 44h100v92z" fill="var(--brass)"/>
+        <path d="M78 95h332v86H78zM116 209h332v86H116zM78 322h332v34H78z" fill="var(--ivory)"/>
+        <path d="M98 117h24v24H98z" fill="var(--brass)"/><path d="M140 119h156v14H140zM98 153h198v8H98z" fill="var(--charcoal)"/>
+        <path d="M145 235h18v18h-18zM180 237h157v14H180zM145 270h192v8H145zM98 330h20v20H98zM133 333h154v12H133z" fill="var(--charcoal)"/>
+        <path d="M72 314c38 0 28-68 69-68h-30m146 36h28m-13-15 14 15-14 15" fill="none" stroke="var(--brass)" stroke-width="8"/>
+        <path d="M274 42v-9m-20 16-6-7m46 7 6-7" stroke="var(--ivory)" stroke-width="5"/>
+      </svg>
+    </section>
 
-  <h2>How entries are rated</h2>
-  <p>Every entry carries a status, a confidence level and the date it was last checked.</p>
-  <ul class="legend">
-    {statuses.map((s) => (
-      <li>
-        <div class="key"><StatusBadge status={s.status} /></div>
-        <p>{s.text}</p>
-      </li>
-    ))}
-  </ul>
+    <section class="about-section" aria-labelledby="partners-title">
+      <div class="about-shell">
+        <h2 id="partners-title">Who we’ve worked with</h2>
+        <!-- TODO(user): replace example labels and example.com links with verified partner details before publication. -->
+        <ul class="partner-grid">
+          {companies.map((number) => (
+            <li><a href="https://example.com/" target="_blank" rel="noopener noreferrer">Company placeholder {String(number).padStart(2, '0')}<span>Placeholder</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
 
-  <h2>Confidence</h2>
-  <p>Confidence is low, medium or high, and says how sure we are of the status above.</p>
-  <ul class="legend levels">
-    {levels.map((l) => (
-      <li>
-        <ConfidenceMeter level={l} />
-        <span class="level-label">{l}</span>
-      </li>
-    ))}
-  </ul>
+    <section class="about-section" id="how-we-work" aria-labelledby="work-title">
+      <div class="about-shell">
+        <h2 id="work-title">How we work</h2>
+        <p class="about-lede">A clear record of what a source is, where it leads and what we know about it.</p>
+        <div class="work-grid">
+          {howWeWork.map((item, index) => (
+            <article class="work-card"><span class="work-number">0{index + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>
+          ))}
+        </div>
+      </div>
+    </section>
 
-  <h2>Notes</h2>
-  <p>Entries marked unverified may be wrong. The date checked is the date the page for that entry was last opened and read.</p>
-  {hasPosts && (
-    <p>Posts on the <a href="/blog/">blog</a> are commentary by their author. They are not directory entries and carry no status or confidence rating.</p>
-  )}
-  {config.contactEmail && (
-    <p>Corrections and suggestions: <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a></p>
-  )}
-  {config.repoUrl && (
-    <p>Source code: <a href={config.repoUrl}>{config.repoUrl}</a></p>
-  )}
+    <section class="about-section team-section" id="meet-the-team" aria-labelledby="team-title">
+      <div class="about-shell">
+        <h2 id="team-title">Meet the team</h2>
+        <h3 class="team-subtitle">Core team</h3>
+        <!-- TODO(user): replace each profile placeholder with verified name, role, bio and photo details. -->
+        <div class="team-grid">
+          {profiles.map((number) => (
+            <article class="profile-card" aria-label={`Team profile placeholder ${String(number).padStart(2, '0')}`}>
+              <div class="profile-image" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="22" r="12"/><path d="M10 58c1-14 9-21 22-21s21 7 22 21z"/></svg><span>{String(number).padStart(2, '0')}</span></div>
+              <p class="profile-name">Profile placeholder {String(number).padStart(2, '0')}</p><p class="profile-role">Role placeholder</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" aria-labelledby="faq-title">
+      <div class="about-shell">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        <div class="faq-grid">
+          {questions.map((item) => <details><summary>{item.q}</summary><p>{item.a}</p></details>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" aria-labelledby="blog-title">
+      <div class="about-shell">
+        <h2 id="blog-title">From the blog</h2>
+        <p class="about-lede">Commentary by its author; blog posts are not directory entries.</p>
+        {posts.length > 0 ? (
+          <div class="post-grid">
+            {posts.map((post) => (
+              <article class="about-post-card">
+                {post.data.cover && <Image class="post-cover" src={post.data.cover.image} alt={post.data.cover.alt} width={640} />}
+                <div class="post-copy">
+                  <p class="post-topics">{post.data.tags.join(' · ')}</p>
+                  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+                  <p class="post-description">{post.data.description}</p>
+                  <time datetime={post.data.publishedDate.toISOString()}>{post.data.publishedDate.toISOString().slice(0, 10)}</time>
+                  <a class="post-link" href={`/blog/${post.id}/`}>Read the post <span aria-hidden="true">→</span></a>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : <p class="about-lede">No posts published yet.</p>}
+      </div>
+    </section>
+
+    <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
+      <!-- TODO(user): replace the email request link with a configured newsletter provider when available. -->
+      <div class="about-shell newsletter-grid">
+        <svg class="newsletter-art" viewBox="0 0 180 140" role="img" aria-labelledby="newsletter-art-title newsletter-art-desc">
+          <title id="newsletter-art-title">A paper plane carrying an update</title><desc id="newsletter-art-desc">A simple paper plane flies above connected points.</desc>
+          <path d="M20 103c25-30 44-4 62-27s34-6 48-34" fill="none" stroke="var(--brass)" stroke-width="3" stroke-dasharray="7 8"/><circle cx="35" cy="91" r="6" fill="none" stroke="var(--brass)" stroke-width="3"/><circle cx="82" cy="77" r="6" fill="none" stroke="var(--brass)" stroke-width="3"/><circle cx="126" cy="43" r="6" fill="none" stroke="var(--brass)" stroke-width="3"/><path d="M40 30 148 9 111 91 91 58 40 30Zm51 28 57-49" fill="var(--ivory)" stroke="var(--ivory)" stroke-linejoin="round" stroke-width="3"/>
+        </svg>
+        <div><p class="newsletter-label">Our mailing list</p><h2 id="newsletter-title">Keep yourself up to date<br />with <span>all things open.</span></h2></div>
+        <div class="newsletter-action"><a href={subscribeHref}>Subscribe now!</a><p>Opens an email draft to request updates.</p></div>
+      </div>
+    </section>
+  </div>
 </Base>
+<style>
+  .about-page { width:100vw; margin: -28px 0 -40px calc(50% - 50vw); }
+  .about-shell { width:min(calc(100% - 48px), var(--wide)); margin-inline:auto; }
+  .about-hero { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr); align-items:center; gap:clamp(32px,6vw,80px); padding-block:clamp(48px,8vw,104px); }
+  .about-eyebrow,.newsletter-label { margin:0 0 8px; color:var(--slate); }
+  .about-hero h1 { max-width:13ch; font-size:clamp(42px,5vw,72px); line-height:1.02; letter-spacing:-.04em; }
+  .about-hero-copy > p:not(.about-eyebrow) { max-width:58ch; margin:20px 0 0; color:var(--slate); font-size:18px; line-height:1.6; }
+  .about-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+  .about-button { display:inline-flex; min-height:52px; align-items:center; justify-content:center; padding:12px 20px; border:1px solid var(--charcoal); background:var(--brass); color:var(--charcoal); font-weight:700; text-decoration:none; }
+  .about-button-alt { background:transparent; }
+  .about-hero-art { display:block; width:100%; height:auto; }
+  .about-section { padding-block:clamp(48px,7vw,80px); border-top:1px solid var(--warm-grey); }
+  .about-section h2 { margin:0; font-size:clamp(28px,3vw,40px); line-height:1.12; letter-spacing:-.025em; }
+  .about-lede { max-width:66ch; margin:12px 0 0; color:var(--slate); line-height:1.6; }
+  .partner-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; list-style:none; margin:26px 0 0; padding:0; }
+  .partner-grid a { min-height:92px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:14px; border:1px solid var(--warm-grey); color:var(--charcoal); text-align:center; text-decoration:none; font-weight:700; }
+  .partner-grid a:hover { border-color:var(--brass); }
+  .partner-grid span { color:var(--slate); font:600 10px var(--font-mono); letter-spacing:.06em; text-transform:uppercase; }
+  .work-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-top:28px; }
+  .work-card { min-height:172px; padding:20px; border:1px solid var(--warm-grey); background:var(--ivory); }
+  .work-number { display:block; margin-bottom:18px; color:var(--brass); font:500 12px var(--font-mono); }
+  .work-card h3 { margin:0; font-size:18px; line-height:1.3; }
+  .work-card p { margin:8px 0 0; color:var(--slate); font-size:14px; line-height:1.5; }
+  .team-subtitle { margin:20px 0 16px; color:var(--slate); font-size:20px; }
+  .team-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:20px 14px; }
+  .profile-card { min-width:0; text-align:center; }
+  .profile-image { position:relative; display:grid; aspect-ratio:1; place-items:center; overflow:hidden; border:1px solid var(--warm-grey); background:var(--warm-grey); color:var(--slate); }
+  .profile-image svg { width:52%; height:52%; fill:currentColor; opacity:.55; }
+  .profile-image span { position:absolute; right:8px; bottom:6px; color:var(--charcoal); font:12px var(--font-mono); }
+  .profile-name { margin:10px 0 3px; font-weight:700; font-size:14px; }
+  .profile-role { margin:0; color:var(--slate); font-size:13px; }
+  .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 32px; margin-top:20px; }
+  .faq-grid details { border-top:1px solid var(--warm-grey); padding:16px 0; }
+  .faq-grid details:last-child { border-bottom:1px solid var(--warm-grey); }
+  .faq-grid summary { cursor:pointer; font-weight:700; }
+  .faq-grid details p { margin:10px 0 0; color:var(--slate); line-height:1.6; }
+  .post-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:26px; }
+  .about-post-card { height:360px; min-width:0; display:flex; flex-direction:column; border:1px solid var(--warm-grey); background:var(--ivory); }
+  .post-cover { display:block; width:100%; height:180px; flex:none; object-fit:cover; border-bottom:1px solid var(--warm-grey); }
+  .post-copy { display:flex; min-height:0; flex:1; flex-direction:column; padding:14px 16px 12px; }
+  .post-topics { margin:0 0 7px; color:var(--brass); font:600 10px var(--font-mono); text-transform:uppercase; letter-spacing:.05em; }
+  .post-copy h3 { margin:0; font-size:17px; line-height:1.25; }
+  .post-copy h3 a { color:var(--charcoal); text-decoration:none; }
+  .post-copy h3 a:hover { text-decoration:underline; text-underline-offset:3px; }
+  .post-description { display:-webkit-box; overflow:hidden; -webkit-box-orient:vertical; -webkit-line-clamp:2; margin:7px 0 8px; color:var(--slate); font-size:13px; line-height:1.4; }
+  .post-copy time { color:var(--slate); font:11px var(--font-mono); }
+  .post-link { align-self:flex-end; margin-top:auto; padding-top:8px; color:var(--charcoal); font-size:12px; font-weight:700; }
+  .newsletter { padding-block:34px; background:var(--charcoal); color:var(--ivory); }
+  .newsletter-grid { display:grid; grid-template-columns:minmax(110px,.7fr) minmax(0,2fr) auto; align-items:center; gap:28px; }
+  .newsletter-art { width:min(100%,180px); height:auto; }
+  .newsletter-label { color:var(--warm-grey); font-size:18px; }
+  .newsletter h2 { max-width:22ch; margin:0; color:var(--ivory); font-size:clamp(25px,3vw,38px); line-height:1.15; }
+  .newsletter h2 span { color:var(--brass); }
+  .newsletter-action { text-align:center; }
+  .newsletter-action a { display:inline-flex; min-height:52px; align-items:center; justify-content:center; padding:14px 22px; background:var(--brass); color:var(--charcoal); font-weight:700; text-decoration:none; white-space:nowrap; }
+  .newsletter-action p { max-width:24ch; margin:8px auto 0; color:var(--warm-grey); font-size:12px; line-height:1.4; }
+  @media (max-width:900px) { .partner-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } .team-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } .work-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:760px) { .about-shell { width:min(calc(100% - 32px),var(--wide)); } .about-hero { grid-template-columns:1fr; gap:24px; padding-block:40px 48px; } .about-hero-art { width:min(100%,460px); margin-inline:auto; } .faq-grid { grid-template-columns:1fr; } .post-grid { grid-template-columns:1fr; } .about-post-card { height:auto; min-height:160px; display:grid; grid-template-columns:minmax(96px,29%) minmax(0,1fr); grid-template-rows:1fr auto; } .post-cover { grid-column:1; grid-row:1 / 3; height:100%; min-height:0; max-height:170px; object-fit:cover; } .post-copy { grid-column:2; grid-row:1 / 3; padding:12px; } .post-description { -webkit-line-clamp:2; } .post-link { grid-column:2; grid-row:2; align-self:end; justify-self:end; padding-top:6px; } .newsletter-grid { grid-template-columns:72px minmax(0,1fr); gap:16px; } .newsletter-art { width:72px; } .newsletter-action { grid-column:2; text-align:left; } .newsletter-action p { margin-left:0; } }
+  @media (max-width:560px) { .partner-grid,.team-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:420px) { .about-shell { width:min(calc(100% - 32px),var(--wide)); } .about-hero h1 { font-size:42px; } .about-actions { display:grid; grid-template-columns:1fr; } .about-button { width:100%; } .work-grid { grid-template-columns:1fr; } .newsletter-grid { grid-template-columns:1fr; } .newsletter-art { width:100px; } .newsletter-action { grid-column:auto; } .newsletter h2 br { display:none; } }
+  @media (prefers-reduced-motion: reduce) { .about-page { scroll-behavior:auto; } }
+</style>
