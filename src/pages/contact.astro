@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import { config } from '../config';
 import { activeSocialLinks } from '../utils/social';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 
 const email = config.contactEmail;
 const phone = config.contactPhone;
@@ -17,7 +18,7 @@ const showForm = live || import.meta.env.DEV;
       <h1>Contact</h1>
       <p>Corrections, suggestions and questions are welcome.</p>
       {showForm ? (
-        <form class="contact-form" method="post" action="/api/contact" id="contact-form">
+        <form class="contact-form" method="post" action="/api/contact" id="contact-form" data-submit-form data-endpoint="/api/contact" data-site-key={PUBLIC_TURNSTILE_SITE_KEY ?? ''}>
           <div class="field">
             <label for="c-name">Name</label>
             <input id="c-name" name="name" type="text" required maxlength="80" autocomplete="name" />
@@ -44,6 +45,7 @@ const showForm = live || import.meta.env.DEV;
           <div data-turnstile></div>
           <button class="button" type="submit" disabled={!live}>Send message</button>
           <p data-status role="status" aria-live="polite" class="form-status">{!live && 'Preview only. The form is not connected yet.'}</p>
+        <noscript><p class="form-status">This form needs JavaScript to send. Use the email address or phone number below.</p></noscript>
         </form>
       ) : (
         <p class="notice">The message form is not available yet. Use the email address or phone number below.</p>
@@ -81,4 +83,7 @@ const showForm = live || import.meta.env.DEV;
       <rect x="176" y="448" width="120" height="8" fill="#D8D3CA" />
     </svg>
   </section>
+<script>
+    import '../scripts/submit-form';
+  </script>
 </Base>

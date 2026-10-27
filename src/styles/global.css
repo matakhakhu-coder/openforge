@@ -261,3 +261,8 @@ body { overflow-x: clip; }
   .contact-art { grid-column: 2; grid-row: 1; justify-self: end; align-self: start; max-width: 520px; }
   .contact-details { grid-column: 1 / -1; grid-row: 2; grid-template-columns: 1.1fr 0.9fr; column-gap: var(--space-10); }
 }
+
+/* contact form status */
+.contact [data-turnstile] { margin-top: var(--space-3); }
+.form-status[data-tone='error'] { color: var(--charcoal); font-weight: 700; border-left: 4px solid var(--charcoal); padding-left: var(--space-1h); }
+.form-status[data-tone='success'] { color: var(--charcoal); border-left: 4px solid var(--brass); padding-left: var(--space-1h); }

@@ -26,3 +26,6 @@ pnpm-debug.log*
 # env files, any suffix
 .env.*
 !.env.example
+
+# Vercel build output
+.vercel/
